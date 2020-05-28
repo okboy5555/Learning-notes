@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1. 请使用 JavaScript 实现名为 flatten(input) 的函数，可以将传入的 input 对象（Object 或者 Array）进行扁平化处理并返回结果。具体效果如下：
+
+      const input = {
+        a: 1,
+        b: [1, 2, { c: true }, [3]],
+        d: { e: 2, f: 3 },
+        g: null,
+      };
+      // 返回
+      // {
+      //     "a": 1,
+      //     "b[0]": 1,
+      //     "b[1]": 2,
+      //     "b[2].c": true,
+      //     "b[3][0]": 3,
+      //     "d.e": 2,
+      //     "d.f": 3,
+      //     // "g": null,  值为null或者undefined，丢弃
+      // };
+
+      function flatten(input, temp = {}, key = "",isArray = false) {
+        Object.keys(input).forEach((item, index) => {
+          // 判断空
+          if (!input[item]) {
+            return
+          } else if (Array.isArray(input[item])) {
+            let keytemp = isArray ? key + "[" + index + "]" : key + item;
+            // 判断数组
+            flatten(input[item], temp, keytemp, true);
+          } else if (typeof input[item] == "object") {
+            let keytemp = isArray ? key + "[" + index + "]." : key  + item + ".";
+            // 判断对象
+            flatten(input[item], temp, keytemp, false);
+          } else {
+            let keytemp =  isArray ? key + "[" + index + "]" : key  + item;
+            temp[keytemp] = input[item];
+          }
+        });
+        return temp;
+      }
+
+      console.log(flatten(input));
+    </script>
+  </body>
+</html>
