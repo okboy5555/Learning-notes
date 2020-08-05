@@ -11,4 +11,5 @@ Maybe it's not too late to review now
 
 8.2 node学习15%，逐步规范react组件书写，入参传参使用ts严格定义，能够完成简单react组件，下周继续node和高阶react学习，nodeserver delay
 
-[测试class](https://github.com/okboy5555/Interview/issues/2)
+8.5 简历被捞，准备部分面试题，node 10%
+
