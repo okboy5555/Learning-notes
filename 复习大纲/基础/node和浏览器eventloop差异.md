@@ -1,13 +1,14 @@
-浏览器环境下，microtask的任务队列是每个macrotask执行完之后执行。而在Node.js中，microtask会在事件循环的各个阶段之间执行，也就是一个阶段执行完毕，就会去执行microtask队列的任务。
+浏览器环境下，microtask 的任务队列是每个 macrotask 执行完之后执行。而在 Node.js 中，microtask 会在事件循环的各个阶段之间执行，也就是一个阶段执行完毕，就会去执行 microtask 队列的任务。
 
-其中libuv引擎中的事件循环分为 6 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。
-timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调
+Node 的 Event Loop 分为 6 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段
+
+其中 libuv 引擎中的事件循环分为 6 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。
+timers 阶段：这个阶段执行 timer（setTimeout、setInterval）的回调
 I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调
-idle, prepare 阶段：仅node内部使用
-poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里
+idle, prepare 阶段：仅 node 内部使用
+poll 阶段：获取新的 I/O 事件, 适当的条件下 node 将阻塞在这里
 check 阶段：执行 setImmediate() 的回调
 close callbacks 阶段：执行 socket 的 close 事件回调
-
 
 进程与线程区别？JS 单线程带来的好处？
 进程描述了 CPU 在运行指令及加载和保存上下文所需的时间，放在应用上来说就代表了一个程序。线程是进程中的更小单位，描述了执行一段指令所需的时间
@@ -24,7 +25,9 @@ Event Loop 执行顺序
 当执行完所有微任务后，如有必要会渲染页面
 然后开始下一轮 Event Loop，执行宏任务中的异步代码，也就是 setTimeout 中的回调函数
 
-
 微任务包括 process.nextTick ，promise ，MutationObserver，其中 process.nextTick 为 Node 独有
 
 宏任务包括 script ， setTimeout ，setInterval ，setImmediate ，I/O ，UI rendering
+
+node 中的 process.nextTick
+Node 中的 process.nextTick，这个函数其实是独立于 Event Loop 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 nextTick 队列，就会清空队列中的所有回调函数，并且优先于其他 microtask 执行

@@ -30,7 +30,6 @@ http 1.0
 header添加Expires字段，表示到期时间，例子：
 
 Expires: Wed, 21 Oct 2015 07:28:00 GMT
-image
 
 但是 Expires 存在一个问题，浏览器检查这个 Expires 的时间用的是电脑自身的时间，而设置 Expires 时间的是服务器，所以会存在服务器与客户端两者时间不同步的情况，这会使缓存无效
 
