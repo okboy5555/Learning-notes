@@ -25,9 +25,66 @@ Event Loop 执行顺序
 当执行完所有微任务后，如有必要会渲染页面
 然后开始下一轮 Event Loop，执行宏任务中的异步代码，也就是 setTimeout 中的回调函数
 
-微任务包括 process.nextTick ，promise ，MutationObserver，其中 process.nextTick 为 Node 独有
-
-宏任务包括 script ， setTimeout ，setInterval ，setImmediate ，I/O ，UI rendering
 
 node 中的 process.nextTick
 Node 中的 process.nextTick，这个函数其实是独立于 Event Loop 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 nextTick 队列，就会清空队列中的所有回调函数，并且优先于其他 microtask 执行
+
+
+
+浏览器：
+macro-task（宏任务） 大概包括：
+
+script（整体代码）
+setTimeout
+setInterval
+setImmediate
+I / O
+UI render
+micro-task（微任务） 大概包括：
+
+process.nextTick
+Promise.then
+async / await （等价于 Promise.then）
+MutationObserver（HTML5 新特性）
+总体结论就是：
+
+执行宏任务
+然后执行宏任务产生的微任务
+若微任务在执行过程中产生了新的微任务，则继续执行微任务
+微任务执行完毕，再回到宏任务中进行下一轮循环
+
+
+
+我们知道 async 会隐式返回一个 Promise 作为结果的函数，那么可以简单理解为：await 后面的函数在执行完毕后，await 会产生一个微任务（Promise.then 是微任务）。但是我们要注意微任务产生的时机，它是执行完 await 后，直接跳出 async 函数，执行其他代码（此处就是协程的运作，A暂停执行，控制权交给B）。其他代码执行完毕后，再回到 async 函数去执行剩下的代码，然后把 await 后面的代码注册到微任务队列中
+但是这种做法其实违反了规范，但是规范也可以更改的
+新版的 chrome 优化了await 的执行速度，await 变得更早执行了
+
+node：
+
+macro-task（宏任务）包括：
+
+setTimeout
+setInterval
+setImmediate
+script（整体代码）
+I / O 操作
+micro-task（微任务）包括：
+
+process.nextTick（与普通微任务有区别，在微任务队列执行之前执行）
+Promise.then 回调
+
+timers
+timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。同样，在 Node 中定时器指定的时间也不是准确时间，只是尽快执行。
+
+poll
+如果当前已经存在定时器，而且有定期到时间了，拿出来执行，事件循环将会到 timers 阶段
+
+如果没有定时器，回去看回调函数队列
+如果 poll 队列不为空，会遍历回到队列并同步执行，直到队列为空或达到系统限制
+如果 poll 队列为空，会有两件事发生
+如果 setImmediate 回调需要执行，poll 阶段将会停止并进入 check 阶段执行回调
+如果没有 setImmediate 回调需要执行，会等待回调被加入到队列中并立即执行回调，这里同样会有个超时时间设置，防止一直等待下去，一段时间后自动进入 check 阶段
+
+check
+check 阶段，这是一个比较简单的阶段，直接执行 setImmediate 的回调
+
