@@ -46,8 +46,10 @@ process.nextTick
 Promise.then
 async / await （等价于 Promise.then）
 MutationObserver（HTML5 新特性）
-总体结论就是：
 
+
+
+总体结论就是：
 执行宏任务
 然后执行宏任务产生的微任务
 若微任务在执行过程中产生了新的微任务，则继续执行微任务
