@@ -19,7 +19,6 @@ http访问控制CORS
 服务器需要设置Access-Control-Allow-Credentials: true 否则cookie会丢失
 
 
-
 预检请求例子
 客户端
 OPTIONS /resources/post-here/ HTTP/1.1
@@ -48,3 +47,7 @@ Content-Length: 0
 Keep-Alive: timeout=2, max=100
 Connection: Keep-Alive
 Content-Type: text/plain
+
+
+它使用 HTTP 的 OPTIONS 请求，一般会包括一下请求头：Access-Control-Request-Method，Access-Control-Request-Headers 和 Origin
+预检请求是一个用于校验服务器是否支持当前方法以及是否能够理解当前请求的一种请求，它区别于一般的请求，不由代码发起，而在必要的时候由浏览器自动发出

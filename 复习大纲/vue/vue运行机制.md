@@ -4,9 +4,6 @@
 初始化之后调用 $mount 会挂载组件，如果是运行时编译，即不存在 render function 但是存在 template 的情况，需要进行「编译」步骤
 
 
-
-
-
 编译
 
 compile编译可以分成 parse、optimize 与 generate 三个阶段，最终需要得到 render function
