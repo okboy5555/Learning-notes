@@ -48,3 +48,7 @@ let tmp = say.mybind(aa,'happy','you are cute')
 let tmp1 = say.bind(aa,'happy','you are cute')
 tmp()
 tmp1()
+
+// https://github.com/lin-xin/blog/issues/7
+// apply、call 方法都会使函数立即执行
+// bind 方法不会立即执行，而是返回一个改变了上下文 this 后的函数。而原函数 func 中的 this 并没有被改变，依旧指向全局对象 window。
