@@ -19,7 +19,7 @@ const handleArr = (arr, size) => {
     }
   }
   handlePaiLie(arr, size, []);
-  console.log(output)
+  // console.log(output)
 }
 
 handleArr(arr, 3);
