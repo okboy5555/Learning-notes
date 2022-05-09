@@ -33,3 +33,7 @@ var instance2 = new SubType("Greg", 27);
 alert(instance2.colors); //"red,blue,green"
 instance2.sayName(); //"Greg";
 instance2.sayAge(); //27
+
+
+// 第一次调用SuperType()：给SubType.prototype写入两个属性name，color。
+// 第二次调用SuperType()：给instance1写入两个属性name，color。
