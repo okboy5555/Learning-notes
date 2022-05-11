@@ -20,7 +20,7 @@ SubType.prototype.getSubValue = function() {
 var instance = new SubType();
 console.log(instance.getSuperValue()); // true
 
-原型链方案存在的缺点：多个实例对引用类型的操作会被篡改。
+// 原型链方案存在的缺点：多个实例对引用类型的操作会被篡改。
 function SuperType(){
   this.colors = ["red", "blue", "green"];
 }
