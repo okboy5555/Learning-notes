@@ -4,23 +4,22 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
- var permuteUnique = function(nums) {
+var permuteUnique = function (nums) {
   let res = [];
   let len = nums.length
-  nums.sort((a,b)=>{ //排序
-      return a-b
+  nums.sort((a, b) => { //排序
+    return a - b
   })
-  unique([],0)
-  return res
   function unique(arr) {
-      if(arr.length == len) res.push([...arr])
-      for(let i=0;i<nums.length;i++){
-          if(nums[i] == nums[i-1]) continue // 跳过，避免重复结果
-          arr.push(nums[i])
-          nums.splice(i,1)
-          unique(arr)
-          nums.splice(i,0,arr.pop()) // 回溯
-      }
+    if (arr.length == len) res.push([...arr])
+    for (let i = 0; i < nums.length; i++) {
+      if (nums[i] == nums[i - 1]) continue // 跳过，避免重复结果
+      arr.push(nums[i])
+      nums.splice(i, 1)
+      unique(arr)
+      nums.splice(i, 0, arr.pop()) // 回溯
+    }
   }
-
+  unique([], 0)
+  return res
 };
