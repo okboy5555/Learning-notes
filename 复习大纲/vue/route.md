@@ -1,7 +1,8 @@
 hash和history
-hash —— 即地址栏 URL 中的 # 符号。比如这个 URL：http://www.abc.com/#/hello，hash 的值为 #/hello。它的特点在于：hash 虽然出现在 URL 中，但不会被包括在 HTTP 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面。
+hash —— 使用url的hash来模拟一个完整的url。比如这个 URL：http://www.abc.com/#/hello，hash 的值为 #/hello。它的特点在于：hash 虽然出现在 URL 中，但不会被包括在 HTTP 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面，同时每一次改变#后的部分，都会在浏览器的访问历史中增加一个记录，使用后退按钮，就可以回到上一个位置。
+总结：hash模式通过锚点值的改变，根据不同的值，渲染指定dom位置的不同数据。利用onhashChange事件，监听hash变化，可以在window对象上监听。
 
-history —— 利用了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法。（需要特定浏览器支持）这两个方法应用于浏览器的历史记录栈，在当前已有的 back、forward、go 的基础之上，它们提供了对历史记录进行修改的功能。只是当它们执行修改时，虽然改变了当前的 URL，但浏览器不会立即向后端发送请求。
+history —— 配置：mode:history， 利用了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法。这两个方法应用于浏览器的历史记录栈，在当前已有的 back、forward、go 的基础之上，它们提供了对历史记录进行修改的功能。只是当它们执行修改时，虽然改变了当前的 URL，但浏览器不会立即向后端发送请求。
 刷新当前页面会去请求服务器，如果没有资源就报404
 
 

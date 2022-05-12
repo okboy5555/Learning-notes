@@ -40,3 +40,9 @@ Fun.prototype.getUserInfo = function() {
 const fun = myNew(Fun,'子君','男')
 // 我的姓名子君，我的性别男
 console.log(fun.getUserInfo())
+
+// 创建一个空对象，作为将要返回的对象实例
+// 将这个空对象的原型，指向了构造函数的prototype属性
+// 将这个空对象赋值给函数内部的this关键字
+// 开始执行构造函数内部的代码
+// 如果构造函数返回一个对象，那么就直接返回该对象，否则返回创建的对象
