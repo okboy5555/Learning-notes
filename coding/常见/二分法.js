@@ -19,3 +19,5 @@ function BinarySearch(arr, target) {
   }
   return -1
 }
+
+// 时间复杂度logn
