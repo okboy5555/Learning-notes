@@ -31,7 +31,7 @@
         // 左边找到了
         highIndex = midIndex - 1;
       } else {
-        // 左边找到了，应该到左边找
+        // 左边没找到，应该到右边找
         lowIndex = midIndex + 1;
       }
     } else {
