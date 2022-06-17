@@ -17,6 +17,33 @@
 // 输入：prices = [7,6,4,3,1]
 // 输出：0
 // 解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+// 解法一
+var maxProfit = function (prices) {
+  const dp = new Array(prices.length).fill(0).map(v=> new Array(2).fill(0));
+  dp[0][0] = 0;
+  dp[0][1] = -prices[0];
+  for (let i = 1; i < prices.length; i++) {
+    dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+    dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+  }
+  return dp[prices.length - 1][0];
+};
+
+// 简化
+var maxProfit = function(prices) {
+  const n = prices.length;
+  let dp0 = 0, dp1 = -prices[0];
+  for (let i = 1; i < n; ++i) {
+      let newDp0 = Math.max(dp0, dp1 + prices[i]);
+      let newDp1 = Math.max(dp1, dp0 - prices[i]);
+      dp0 = newDp0;
+      dp1 = newDp1;
+  }
+  return dp0;
+};
+
+// 解法二：
 let maxProfit = function (prices) {
   let max = 0, minprice = prices[0]
   for (let i = 1; i < prices.length; i++) {
