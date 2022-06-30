@@ -46,6 +46,6 @@ var mergeKLists = function(lists) {
 
 // @lc code=end
 
-// 空间复杂度：O(1)
+// 空间复杂度：O(logk)
 // 时间复杂度：log(k) * k * n
 
