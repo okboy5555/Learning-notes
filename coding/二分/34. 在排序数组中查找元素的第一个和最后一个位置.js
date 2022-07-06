@@ -1,29 +1,38 @@
-/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
- var searchRange = function (nums, target) {
-  let low = 0;
-  let high = nums.length - 1;
-  while (low <= high) {
-    let mid = Math.floor((low + high) / 2);
-    if (nums[mid] === target) {
-      // 如果相等
-      let left = mid;
-      let right = mid;
-      while (left >= 0 && nums[left] === target) {
-        left--;
-      }
-      while (right < nums.length && nums[right] === target) {
-        right++;
-      }
-      return [left + 1, right - 1];
-    } else if (nums[mid] < target) {
-      low = mid + 1;
+const binarySearch = (nums, target) => {
+  let left = 0;
+  let right = nums.length - 1;
+  let ans = nums.length;
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (nums[mid] > target) {
+      right = mid - 1;
+      ans = mid;
     } else {
-      high = mid - 1;
+      left = mid + 1;
     }
+  }
+  return ans - 1;
+}
+const binarySearch2 = (nums, target) => {
+  let left = 0;
+  let right = nums.length - 1;
+  let ans = nums.length;
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (nums[mid] >= target) {
+      right = mid - 1;
+      ans = mid;
+    } else {
+      left = mid + 1;
+    }
+  }
+  return ans;
+}
+var searchRange = function (nums, target) {
+  const left = binarySearch2(nums, target);
+  const right = binarySearch(nums, target);
+  if (left <= right) {
+    return [left, right];
   }
   return [-1, -1];
 };
