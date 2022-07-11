@@ -51,7 +51,7 @@ function handleClick() {
 }
 ```
 startTransition自定义非紧急任务
-
+个人感觉跟react native的 InteractionManager 非常类似
 官方工作组两个应用场景提出了：
 
 慢速渲染：React 需要执行大量计算，以便过渡UI来显示结果。(如搜索引擎的关键词联想)
@@ -81,4 +81,9 @@ export default function App() {
 ```
 
 服务端支持suspense组件
+场景:
+在前端开发中，经常会有这样的需求，加载某个界面时，如果界面的资源比较大，前端对数据的处理也需要时间，加载比较慢，这时候我们需要用一个加载动画或者提示，使得交互更加友好。
+
+React 重写的新 Facebook.com 是用 Hermes 做 SSR 来优化首屏渲染得，但是传统 SSR 的一个问题是，全量渲染话延迟太高了。而 CM + Suspence 就可以做到用 Suspence boundary 将应用分片，然后以此为单位做流式 SSR，有点像BigPipe 
+参考：
 https://juejin.cn/post/7109710400089751559

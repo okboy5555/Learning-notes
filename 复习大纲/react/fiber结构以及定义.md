@@ -1,3 +1,4 @@
+```
 type Fiber = {|
   // 标记不同的组件类型
   //export const FunctionComponent = 0;
@@ -90,6 +91,7 @@ type Fiber = {|
   alternate: Fiber | null,
   ...
 |};
+```
 
 Update
 用于记录组件状态的改变
@@ -101,6 +103,7 @@ PS:expirationTime参数
 
 UpdateQueue
 //创建更新队列
+```
 export function createUpdateQueue<State>(baseState: State): UpdateQueue<State> {
   const queue: UpdateQueue<State> = {
     //应用更新后的state
@@ -122,7 +125,7 @@ export function createUpdateQueue<State>(baseState: State): UpdateQueue<State> {
   };
   return queue;
 }
-
+```
 Updater
 每个组件都会有一个Updater对象，它的用处就是把组件元素更新和对应的fiber关联起来。监听组件元素的更新，并把对应的更新放入该元素对应的fiber的UpdateQueue里面，并且调用ScheduleWork方法，把最新的fiber让scheduler去调度工作。
 
