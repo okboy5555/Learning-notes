@@ -17,8 +17,46 @@ export const Never = 1;
 export const Idle = 2;
 export const Sync = MAX_SIGNED_31_BIT_INT;//整型最大数值，是V8中针对32位系统所设置的最大值
 export const Batched = Sync - 1;
+ case ImmediatePriority:
+  expirationTime = Sync;
+  break;
+  //高优先级 如由用户输入设计交互的任务
+case UserBlockingPriority:
+  expirationTime = computeInteractiveExpiration(currentTime);
+  break;
+  // 正常的异步任务
+case NormalPriority:
+  // This is a normal, concurrent update
+  expirationTime = computeAsyncExpiration(currentTime);
+  break;
+case LowPriority:
+case IdlePriority:
+  expirationTime = Never;
+  break;
+default:
+  invariant(
+    false,
+    'Unknown priority level. This error is likely caused by a bug in ' +
+      'React. Please file an issue.',
+  );
 
 源码中的computeExpirationForFiber函数，该方法用于计算fiber更新任务的最晚执行时间，进行比较后，决定是否继续做下一个任务
+
+简单来说，最终结果是以25为单位向上增加的，比如说我们输入102 - 126之间，最终得到的结果都是625，但是到了127得到的结果就是650了，这就是除以25取整的效果。
+
+即计算出的React低优先级update的expirationTime间隔是25ms， React让两个相近（25ms内）的update得到相同的expirationTime，目的就是让这两个update自动合并成一个Update，从而达到批量更新的目的
+
+执行优先级
+requestIdleCallback和requestAnimationFrame
+requestIdleCallback：
+在浏览器空闲时段内调用的函数排队。是开发人员可以在主事件循环上执行后台和低优先级工作而不会影响延迟关键事件，如动画和输入响应。
+其在回调参数中IdleDeadline可以获取到当前帧剩余的时间。利用这个信息可以合理的安排当前帧需要做的事情，如果时间足够，那继续做下一个任务，如果时间不够就歇一歇。
+requestAnimationFrame：告诉浏览器你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画
+
+Fiber所做的就是需要分解渲染任务，然后根据优先级使用API调度，异步执行指定任务：
+低优先级任务由requestIdleCallback处理，限制任务执行时间，以切分任务，同时避免任务长时间执行，阻塞UI渲染而导致掉帧。
+高优先级任务，如动画相关的由requestAnimationFrame处理；
+并不是所有的浏览器都支持requestIdleCallback，但是React内部实现了自己的polyfill，所以不必担心浏览器兼容性问题。polyfill实现主要是通过rAF+postmessage实现的(最新版本去掉了rAF
 
 
 fiber中最为重要的是return、child、sibling指针，连接父子兄弟节点以构成一颗单链表fiber树，其扁平化的单链表结构的特点将以往递归遍历改为了循环遍历，实现深度优先遍历。
