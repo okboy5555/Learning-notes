@@ -19,12 +19,14 @@ import {jsx as _jsx} from 'react/jsx-runtime';
 因为在React采取了一个事件池的概念，每次我们用的事件源对象，在事件函数执行之后，可以通过releaseTopLevelCallbackBookKeeping等方法将事件源对象释放到事件池中，这样的好处每次我们不必再创建事件源对象，可以从事件池中取出一个事件源对象进行复用，在事件处理函数执行完毕后,会释放事件源到事件池中，清空属性，这就是setTimeout中打印为什么是null的原因了
 事件池复用机制会导致事件内同步异步表现不一致
 这种处理对性能优化微乎其微
+```
 handerClick = (e) => { 
     console.log(e.target) // button 
     setTimeout(()=>{ 
     console.log(e.target) // null
     },0)
 }
+```
 
 React 18.0变化
 
@@ -37,6 +39,7 @@ ReactDOM.createRoot()代替ReactDOM.render()
 
 原生事件和setTimeout等方法里面的setState和周期、合成事件中的表现不一样，React 18 版本解决了这个问题，无论你是在 Promise、setTimeout、或者其他异步回调中更新状态，都会触发批处理
 我们还可以使用 ReactDOM.flushSync() 退出批处理
+```
 import { flushSync } from 'react-dom'
 function handleClick() { 
     flushSync(() => {
@@ -46,15 +49,14 @@ function handleClick() {
         setFlag(f => !f); 
     }); // React has updated the DOM by now
 }
-
-
+```
 startTransition自定义非紧急任务
 
 官方工作组两个应用场景提出了：
 
 慢速渲染：React 需要执行大量计算，以便过渡UI来显示结果。(如搜索引擎的关键词联想)
 慢速网络：React 正在等待来自网络的某些数据。这种用例与 Suspense 紧密集成。(懒加载)
-
+```
 // APP.js
 import "./styles.css";
 import { useState, startTransition } from "react";
@@ -76,6 +78,7 @@ export default function App() {
     </div>
   );
 }
+```
 
 服务端支持suspense组件
 https://juejin.cn/post/7109710400089751559

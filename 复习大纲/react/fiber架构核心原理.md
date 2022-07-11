@@ -10,6 +10,7 @@ commit阶段
 
 分配优先级
 fiber结构中有个expirationTime
+```
 // 源码中的priorityLevel优先级划分
 export const NoWork = 0;
 // 仅仅比Never高一点 为了保证连续必须完整完成
@@ -39,7 +40,7 @@ default:
     'Unknown priority level. This error is likely caused by a bug in ' +
       'React. Please file an issue.',
   );
-
+```
 源码中的computeExpirationForFiber函数，该方法用于计算fiber更新任务的最晚执行时间，进行比较后，决定是否继续做下一个任务
 
 简单来说，最终结果是以25为单位向上增加的，比如说我们输入102 - 126之间，最终得到的结果都是625，但是到了127得到的结果就是650了，这就是除以25取整的效果。

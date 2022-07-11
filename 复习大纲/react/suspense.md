@@ -1,12 +1,15 @@
 用法
 // 懒加载组件切换时显示过渡组件
+```
 const ProfilePage = React.lazy(() => import('./ProfilePage')); // Lazy-loaded
 
 // Show a spinner while the profile is loading
 <Suspense fallback={<Spinner />}>
   <ProfilePage />
 </Suspense>
+```
 // 异步获取数据
+```
 import { unstable_createResource } from 'react-cache'
 
 const resource = unstable_createResource((id) => {
@@ -41,6 +44,7 @@ function ProfileTimeline() {
     </ul>
   );
 }
+```
 在render函数中，我们可以写入一个异步请求，请求数据
 react会从我们缓存中读取这个缓存
 如果有缓存了，直接进行正常的render
@@ -57,7 +61,7 @@ react会从我们缓存中读取这个缓存
 
 原理
 看一下react提供的unstable_createResource源码
-
+```
 export function unstable_createResource(fetch, maybeHashInput) {
   const resource = {
     read(input) {
@@ -85,6 +89,7 @@ export function unstable_createResource(fetch, maybeHashInput) {
   };
   return resource;
 }
+```
 为此，React使用Promises。
 组件可以在其render方法（或在组件的渲染过程中调用的任何东西，例如新的静态getDerivedStateFromProps）中抛出Promise。
 React捕获了抛出的Promise，并在树上寻找最接近的Suspense组件，Suspense其本身具有componentDidCatch，将promise当成error捕获，等待其执行完成其更改状态重新渲染子组件。
@@ -97,6 +102,7 @@ commit阶段的 commitRoot 函数，对应异常处理方法是 dispatch
 reconciliation阶段的异常捕获
 react-reconciler中的performConcurrentWorkOnRoot
 
+```
 // This is the entry point for every concurrent task, i.e. anything that
 // goes through Scheduler.
 // 这里是每一个通过Scheduler的concurrent任务的入口
@@ -157,6 +163,7 @@ do {
     }
     ...
 }
+```
     
 throwException函数分为两部分
 1、遍历当前异常节点的所有父节点，找到对应的错误信息（错误名称、调用栈等），这部分代码在上面中没有展示出来
@@ -173,6 +180,7 @@ commit被分为几个子阶段，每个阶段都try catch调用了一次captureC
 突变(mutate)前阶段：我们在突变前先读出主树的状态，getSnapshotBeforeUpdate在这里被调用
 突变阶段：我们在这个阶段更改主树，完成WIP树转变为current树
 样式阶段：调用从被更改后主树读取的effect
+```
 export function captureCommitPhaseError(sourceFiber: Fiber, error: mixed) {
   if (sourceFiber.tag === HostRoot) {
     // Error was thrown at the root. There is no parent, so the root
@@ -213,6 +221,7 @@ export function captureCommitPhaseError(sourceFiber: Fiber, error: mixed) {
     fiber = fiber.return;
   }
 }
+```
 captureCommitPhaseError函数做的事情和上部分的 throwException 类似，遍历当前异常节点的所有父节点，找到异常边界组件（有componentDidCatch生命周期函数的组件），新建update，在update.callback中调用组件的componentDidCatch生命周期函数。
 
 throwException 和 captureCommitPhaseError在遍历节点时，是从异常节点的父节点开始遍历，所以异常捕获一般由拥有componentDidCatch或getDerivedStateFromError的异常边界组件进行包裹，而其是无法捕获并处理自身的报错。
