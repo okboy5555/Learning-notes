@@ -1,31 +1,20 @@
-/*
- * @lc app=leetcode.cn id=101 lang=javascript
- *
- * [101] 对称二叉树
- */
-
-// @lc code=start
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
+// https://leetcode.cn/problems/symmetric-tree/
 /**
  * @param {TreeNode} root
  * @return {boolean}
  */
-var isSymmetric = function (root) {
-  if (!root) return true;
-  var leftAndRight = function (left, right) {
-      if (!left && !right) return true;
-      if (!left || !right) return false;
-      if (left.val != right.val) return false;
-      return leftAndRight(left.left, right.right) && leftAndRight(left.right, right.left);
+ var isSymmetric = function (root) {
+  const dfs = (root1, root2) => {
+      // 节点都为null
+      if (root1 == null && root2 == null) return true;
+      // 只有一个节点为null，不对称
+      if (root1 != null && root2 == null || root1 == null && root2 != null) return false;
+      // 先序遍历查看节点值是否相等，不相等返回false，相等继续判断子树
+      if (root1.val == root2.val) return dfs(root1.left, root2.right) && dfs(root1.right, root2.left);
+      return false;
   }
-  return leftAndRight(root.left, root.right);
+  return dfs(root, root);
 };
 
-// @lc code=end
-
+// 时间复杂度O(n)
+// 空间复杂度O(n)
