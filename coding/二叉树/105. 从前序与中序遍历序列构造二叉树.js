@@ -9,6 +9,9 @@ var buildTree = function (preorder, inorder) {
   return root;
 };
 
+// 时间复杂度O(n)
+// 空间复杂度O(n)
+
 // 思路
 
 // 变量 pre 保存当前要构造的树的 root
