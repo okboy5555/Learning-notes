@@ -30,3 +30,6 @@ var numIslands = function (grid) {
   }
   return count;
 };
+
+// 时间复杂度O(m*n)
+// 空间复杂度O(m*n)
