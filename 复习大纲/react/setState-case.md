@@ -1,0 +1,1 @@
+在React的setState函数中，会根据一个变量isBatchingUpdates来判断当前变更是直接更新state还是将其加入队列中，isBatchingUpdates的默认值是false，但是在React调用事件处理函数的时候，会先调用bachedUpdates，将isBatchingUpdates的值置为true，那么此时，所有的更新都会被放进队列之中，直到函数结束，此时更新state
